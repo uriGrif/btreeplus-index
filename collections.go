@@ -12,11 +12,9 @@ func (s *stack[T]) pop() (T, bool) {
 		return result, false
 	}
 	result = (*s)[len(*s)-1]
-	if len(*s) > 1 {
-		*s = (*s)[:len(*s)-2]
-	} else {
-		*s = (*s)[0:0]
-	}
+
+	*s = (*s)[:len(*s)-1]
+
 	return result, true
 }
 

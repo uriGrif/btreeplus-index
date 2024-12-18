@@ -17,7 +17,7 @@ func TestInsertion(t *testing.T) {
 		Root:   nil,
 		Unique: true,
 	}
-	values := []indexableInt{1, 2, 4, 5, 6, 3, 16, 10, 12}
+	values := []indexableInt{1, 2, 4, 5, 6, 3, 16, 10, 12, 7, 8, 13, 14, 17, 18, 19, 20}
 	for _, v := range values {
 		tree.Insert(&v)
 		fmt.Printf("inserted: %v - Tree:\n", v)

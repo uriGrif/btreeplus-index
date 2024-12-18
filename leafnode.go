@@ -55,6 +55,7 @@ func (n *leafNode[K, T]) split(value *T, root *node[K, T], parentStack stack[nod
 		prevNode: n,
 		nextNode: n.nextNode,
 	}
+	n.nextNode = newNode
 	var splitPos int = n.degree / 2
 	for i := splitPos + 1; i < n.degree; i++ {
 		newNode.keys = append(newNode.keys, n.keys[i])

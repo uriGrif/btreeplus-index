@@ -26,7 +26,7 @@ func (n *internalNode[K, T]) nextNodePosition(key K) int {
 	for lo < hi {
 		var i int = (hi + lo) / 2
 
-		if key < n.keys[i] {
+		if key <= n.keys[i] {
 			hi = i
 		} else {
 			lo = i + 1
@@ -73,19 +73,19 @@ func (n *internalNode[K, T]) split(root *node[K, T], parentStack stack[node[K, T
 	n.values = n.values[:splitPos+1]
 
 	// add new value to corresponding node
-	newKey := child2.getMinKey()
+	key1 := child1.getMaxKey()
 
-	if newKey <= n.keys[len(n.keys)-1] {
-		insertPos := orderedInsert(&n.keys, newKey)
+	if key1 <= n.keys[len(n.keys)-1] {
+		insertPos := orderedInsert(&n.keys, key1)
 		insertAt(&n.values, child1, insertPos)
 	} else {
-		insertPos := orderedInsert(&newNode.keys, newKey)
+		insertPos := orderedInsert(&newNode.keys, key1)
 		insertAt(&newNode.values, child1, insertPos)
 	}
 
-	oldKey := child2.getMaxKey()
-	if oldKey <= n.keys[len(n.keys)-1] {
-		updatePos := n.nextNodePosition(oldKey)
+	key2 := child2.getMaxKey()
+	if key2 <= n.keys[len(n.keys)-1] {
+		updatePos := n.nextNodePosition(key2)
 		if updatePos == -1 {
 			// value didn't exist
 			n.values = append(n.values, child2)
@@ -93,7 +93,7 @@ func (n *internalNode[K, T]) split(root *node[K, T], parentStack stack[node[K, T
 			n.values[updatePos] = child2
 		}
 	} else {
-		updatePos := newNode.nextNodePosition(oldKey)
+		updatePos := newNode.nextNodePosition(key2)
 		if updatePos == -1 {
 			// value didn't exist
 			newNode.values = append(newNode.values, child2)
@@ -119,7 +119,7 @@ func (n *internalNode[K, T]) split(root *node[K, T], parentStack stack[node[K, T
 }
 
 func (n *internalNode[K, T]) handleChildrenSplit(root *node[K, T], parentStack stack[node[K, T]], child1, child2 node[K, T]) {
-	key1 := child2.getMinKey()
+	key1 := child1.getMaxKey()
 
 	if len(n.keys) == n.degree {
 		// split this node
