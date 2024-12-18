@@ -22,8 +22,12 @@ func (n *leafNode[K, T]) getMaxKey() K {
 	return n.keys[len(n.keys)-1]
 }
 
+func (n *leafNode[K, T]) valuesAmount() int {
+	return len(n.keys)
+}
+
 func (n *leafNode[K, T]) get(key K) *T {
-	for _, v := range n.values {
+	for _, v := range n.values { // should use binary search instead
 		if (*v).GetKey() == key {
 			return v
 		}
@@ -84,4 +88,10 @@ func (n *leafNode[K, T]) split(value *T, root *node[K, T], parentStack stack[nod
 	}
 	p := (parentNode).(*internalNode[K, T])
 	p.handleChildrenSplit(root, parentStack, n, newNode)
+}
+
+func (n *leafNode[K, T]) delete(key K) {
+	pos := findPosition(n.keys, key)
+	deleteAt(&n.keys, pos)
+	deleteAt(&n.values, pos)
 }

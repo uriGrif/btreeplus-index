@@ -13,6 +13,8 @@ type node[K keyAble, T Indexable[K]] interface {
 	printKeys()
 	get(K) *T
 	insert(*T, *node[K, T], stack[node[K, T]])
+	delete(K)
 	getMinKey() K
 	getMaxKey() K
+	valuesAmount() int
 }

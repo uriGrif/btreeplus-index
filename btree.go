@@ -47,6 +47,17 @@ func (t *BtreeIndex[K, T]) Insert(value *T) error {
 	return nil
 }
 
+func (t *BtreeIndex[K, T]) Delete(key K) error {
+	// this is a simplified delete: it only merges the nodes if the leaf node where the entry was deleted is empty
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	if t.unsyncGet(key) == nil {
+		return errors.New("can't delete key beacuse it doesn't exist")
+	}
+	t.Root.delete(key)
+	return nil
+}
+
 func (t *BtreeIndex[K, T]) levelTraverse(f func(node[K, T])) {
 	var q queue[node[K, T]] = make([]node[K, T], 0)
 	q.push(t.Root)

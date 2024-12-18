@@ -20,6 +20,10 @@ func (n *internalNode[K, T]) getMaxKey() K {
 	return n.keys[len(n.keys)-1]
 }
 
+func (n *internalNode[K, T]) valuesAmount() int {
+	return len(n.keys)
+}
+
 func (n *internalNode[K, T]) nextNodePosition(key K) int {
 	// basically a binary search, but not for an exact value
 	var lo, hi int = 0, len(n.keys) - 1
@@ -139,4 +143,14 @@ func (n *internalNode[K, T]) handleChildrenSplit(root *node[K, T], parentStack s
 
 	insertPos := orderedInsert(&n.keys, key1)
 	insertAt(&n.values, child1, insertPos)
+}
+
+func (n *internalNode[K, T]) delete(key K) {
+	pos := n.nextNodePosition(key) // assume I checked before if element existed
+	child := n.values[pos]
+	child.delete(key)
+	if child.valuesAmount() == 0 {
+		deleteAt(&n.keys, pos)
+		deleteAt(&n.values, pos)
+	}
 }

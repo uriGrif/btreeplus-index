@@ -70,3 +70,20 @@ func orderedInsert[K keyAble](s *[]K, value K) int {
 	insertAt(s, value, pos)
 	return pos
 }
+
+func deleteAt[K any](s *[]K, pos int) {
+	if len(*s) == 0 {
+		return
+	}
+
+	*s = append((*s)[:pos], (*s)[pos+1:]...)
+}
+
+func findPosition[K comparable](s []K, value K) int {
+	for i, v := range s { // should use binary search instead
+		if value == v {
+			return i
+		}
+	}
+	return -1
+}
